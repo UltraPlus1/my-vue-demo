@@ -1,0 +1,34 @@
+// 实现dom的渲染和双向数据绑定
+export class DomRender {
+    constructor() {
+        this.app = document.getElementById('app')
+    }
+    initRender(jsDom, data, methods) {
+        jsDom.forEach(item => {
+            // render
+            const newEle = document.createElement(item.type)
+            newEle.id = item.id
+            newEle.innerHTML = data[item.model]
+            this.app.appendChild(newEle)
+            // bind Events
+            if (item.events instanceof Array) {
+                item.events.forEach(event => {
+                    this.bindEvents(
+                        newEle,
+                        event.type,
+                        methods[event.methodName]
+                    )
+                })
+            }
+        })
+    };
+    updateById(ids, val) {
+        ids.forEach((id) => {
+            const Ele = document.getElementById(id) || {};
+            Ele.innerHTML = val;
+        })
+    };
+    bindEvents(ele, event, methods) {
+        ele.addEventListener(event,methods)
+    }
+}
