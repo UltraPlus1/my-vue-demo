@@ -15,17 +15,16 @@ class MyVue{
   constructor(domList, data) {
     // 初始化 dom的操作对象
     this.domRender = new DomRender();
-    const { bindModel, virtualTemplate } = this.bindMVVM(domList, data);
+    const { bindModel, virtualTemplate,state } = this.bindMVVM(domList, data);
     this.bindModel = bindModel
+    this.state = state
     // 定义方法
     this.methods = {
       AddCount: () => {
-        const count = this.getVal('count');
-        this.update('count', count + 1)
+        this.state.count += 1;
       },
       GenRandomNum: () => {
-        const newCount = Math.floor(Math.random() * 100)
-        this.update('randomNum', newCount)
+        this.state.randomNum = Math.floor(Math.random() * 100)
       }
     };
     this.domRender.initRender(virtualTemplate, data, this.methods)
@@ -39,7 +38,20 @@ class MyVue{
       bindModel.push({ modelName: element.model, viewId: id, value: data[element.model] });
       virtualTemplate.push({...element,id})
     }
-    return {bindModel,virtualTemplate}
+    // Proxy API 优化
+    const that = this
+    const state = new Proxy(data,{
+      get:function(target,key,receiver) {
+        const ret = Reflect.get(target, key, receiver);
+        return that.getVal(key);
+      },
+      set:function(target,key,value,receiver) {
+        const ret = Reflect.set(target, key, value, receiver)
+        that.update(key, value);
+        return ret;
+      }
+  })
+    return {bindModel,virtualTemplate,state}
   };
   update(key, val) {
     // 更新model
