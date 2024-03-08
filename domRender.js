@@ -8,7 +8,12 @@ export class DomRender {
             // render
             const newEle = document.createElement(item.type)
             newEle.id = item.id
-            newEle.innerHTML = data[item.model]
+            // input 特殊处理
+            if (item.type !== 'input') {
+                newEle.innerHTML = data[item.model] 
+            } else {
+                newEle.value = data[item.model]
+            }
             this.app.appendChild(newEle)
             // bind Events
             if (item.events instanceof Array) {
@@ -25,7 +30,11 @@ export class DomRender {
     updateById(ids, val) {
         ids.forEach((id) => {
             const Ele = document.getElementById(id) || {};
-            Ele.innerHTML = val;
+            if (Ele.tagName === 'INPUT') {
+                Ele.value = val; 
+            } else {
+                Ele.innerHTML = val;   
+            }
         })
     };
     bindEvents(ele, event, methods) {

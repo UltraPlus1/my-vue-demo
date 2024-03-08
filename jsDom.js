@@ -21,6 +21,13 @@ export default {
             ]
         },
         {
+            type: "input",
+            model: 'btnLabel',
+            events: [
+                {type:'input',methodName:'updateLabel'}
+            ]
+        },
+        {
             type: "button",
             model: "btnLabel2",
             events: [

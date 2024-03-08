@@ -25,6 +25,10 @@ class MyVue{
       },
       GenRandomNum: () => {
         this.state.randomNum = Math.floor(Math.random() * 100)
+      },
+      updateLabel: (event) => {
+        const val = event.srcElement.value
+        this.state.btnLabel = val
       }
     };
     this.domRender.initRender(virtualTemplate, data, this.methods)
