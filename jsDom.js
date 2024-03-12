@@ -33,6 +33,13 @@ export default {
             events: [
                 {type:'click',methodName:'GenRandomNum'}
             ]
+        },
+        {
+            type: "button",
+            model: 'msgLabel',
+            events: [
+                {type:"click", methodName:'fetchMsg'}
+            ]
         }
     ]
 }

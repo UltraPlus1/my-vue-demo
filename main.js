@@ -7,7 +7,8 @@ const defaultData = {
   count: 0,
   randomNum: 33,
   btnLabel: 'count+1',
-  btnLabel2: 'randomNum'
+  btnLabel2: 'randomNum',
+  msgLabel:'sendMsg111'
 }
 
 // 类比vue对象
@@ -29,6 +30,27 @@ class MyVue{
       updateLabel: (event) => {
         const val = event.srcElement.value
         this.state.btnLabel = val
+      },
+      fetchMsg: () => {
+        console.log('fetchMsg')
+        // 1. 创建一个 new XMLHttpRequest 对象
+        let xhr = new XMLHttpRequest();
+
+        // 2. 配置它：从 URL /article/.../load GET-request
+        xhr.open('GET', '/api/test');
+
+        // 3. 通过网络发送请求
+        xhr.send();
+
+        // 4. 当接收到响应后，将调用此函数
+        xhr.onload = ()=> {
+          if (xhr.status != 200) { // 分析响应的 HTTP 状态
+            alert(`Error ${xhr.status}: ${xhr.statusText}`); // 例如 404: Not Found
+          } else { // 显示结果
+            this.state.btnLabel = xhr.response;
+          }
+          
+        };
       }
     };
     this.domRender.initRender(virtualTemplate, data, this.methods)
